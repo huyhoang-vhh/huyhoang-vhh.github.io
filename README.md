@@ -1,4 +1,4 @@
-# Studium IES
+# IES
 
 Rozcestník neoficiálních studijních webů pro předměty IES FSV UK (ZS 2026/27):
 
