@@ -1154,6 +1154,38 @@ a.dd-i, a.dd-i:hover { text-decoration: none; }
 span.dd-i[aria-current] { cursor: default; }
 .ies-sw > .nv-b span { font-weight: 600; letter-spacing: .02em; }
 
+/* odkaz „Přeskočit na obsah“ – viditelný jen při ovládání klávesnicí */
+.skip { position: fixed; left: 12px; top: 8px; z-index: 100; transform: translateY(-160%); background: var(--ink); color: var(--bg); border: 0; border-radius: 10px; padding: 10px 16px; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
+.skip:focus-visible { transform: none; outline: 2px solid var(--blue); outline-offset: 2px; }
+#view:focus { outline: none; }
+
+/* =================== pravidla animací (2026-11-25) ===================
+   UI animace do ~250 ms (Doherty: odezva hned), postupný nástup (stagger 35 ms), menu vyrůstá z tlačítka,
+   časté ovládání (pilulky, čipy, odpovědi) bez efektů navíc, okamžitá odezva na stisk (:active).
+   Výrazné zůstává jen to, co je „vrchol“: úvodní pás, odpočet a kreslení grafu. */
+.fx .rv { transform: translate3d(0, 10px, 0); transition: opacity .24s var(--ease-out), transform .28s var(--ease-out); transition-delay: calc(var(--d, 0) * 35ms); }
+.fx .tl-i.rv::before { transition: transform .3s var(--ease-out) .05s; }
+.meter i { transition: transform .45s var(--ease-out) .05s; }
+.pill { transition: transform .15s var(--ease-out), box-shadow .2s var(--ease-out), filter .15s, background-color .15s; }
+.pill::after { display: none; }
+.tile, .tcard, .step3, .pp-nb, .prow, .rcard { transition: transform .2s var(--ease-out), box-shadow .2s var(--ease-out); }
+::view-transition-new(root) { animation-duration: .22s; }
+::view-transition-old(root) { animation-duration: .15s; }
+.dd-box { transform-origin: 24px 0; animation: dd-in .14s var(--ease-out); }
+@keyframes dd-in { from { opacity: 0; transform: translateY(-4px) scale(.97); } }
+.chip:active, .dd-i:active, .opt:active, .seg button:active, .prow:active, .srch-i:active, .tile:active { transform: scale(.98); transition-duration: .06s; }
+.pill:not(:disabled):active { transform: scale(.97); transition-duration: .06s; }
+@media (prefers-reduced-motion: reduce) { .chip:active, .dd-i:active, .opt:active, .seg button:active, .prow:active, .srch-i:active, .tile:active, .pill:active { transform: none; } }
+
+/* =================== bez kapitálek (2026-11-25): štítky a podtitulky normálním písmem ===================
+   ALL CAPS podtitulky působí jako generický „AI“ design a hůř se čtou; nechávám jen velikost, barvu a tučnost. */
+.thm .lbl, .lbl, .pp-h, .why-l, .kp .lbl, .dd-h, .hp-tag, .srch-k, .soon, .badge { text-transform: none; letter-spacing: -.005em; }
+.thm .lbl, .lbl, .kp .lbl, .why-l, .hp-tag, .srch-k { font-size: 13px; }
+.pp-h { font-size: 14px; }
+.dd-h { font-size: 13px; }
+.tag, .prow-no small, th { text-transform: none; letter-spacing: 0; }
+.prow-no small { font-size: 11px; }
+
 /* =================== rozcestník IES (navazuje na style.css z MAT I) =================== */
 :root { --mat: #0071e3; --eko: #c2510c; --mat-soft: color-mix(in srgb, var(--mat) 11%, transparent); --eko-soft: color-mix(in srgb, var(--eko) 12%, transparent); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --mat: #2997ff; --eko: #ff9f45; } }
@@ -1217,7 +1249,7 @@ a.row:hover { text-decoration: none; background: var(--acc-soft); }
 .row .mini i { display: block; height: 100%; background: var(--acc); border-radius: 99px; }
 .sc-ex { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border-radius: 16px; background: var(--acc-soft); }
 .sc-ex p { font-size: 15px; }
-.sc-ex .lbl { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--acc); }
+.sc-ex .lbl { font-size: 14px; font-weight: 600; color: var(--acc); }
 .sc-ex .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .sc-ex .chip { min-height: 32px; font-size: 13px; padding: 0 12px; }
 .sc-ex .chip[aria-pressed="true"] { background: var(--acc); color: #fff; box-shadow: none; }
@@ -1269,7 +1301,7 @@ a.row:hover { text-decoration: none; background: var(--acc-soft); }
 .tli-m span { font-size: 14px; color: var(--ink-2); }
 .tli-r { font-size: 14px; color: var(--ink-2); text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .tli-r b { display: block; color: var(--ink); font-size: 15px; }
-.mine-l { font-size: 11px; font-weight: 700; color: var(--acc); text-transform: uppercase; letter-spacing: .04em; }
+.mine-l { font-size: 13px; font-weight: 600; color: var(--acc); }
 .seg { display: inline-flex; gap: 4px; padding: 4px; border-radius: 99px; background: color-mix(in srgb, var(--ink) 6%, transparent); flex-wrap: wrap; }
 .seg button { all: unset; cursor: pointer; padding: 6px 14px; border-radius: 99px; font-size: 14px; font-weight: 500; }
 .seg button[aria-pressed="true"] { background: var(--tile); box-shadow: 0 1px 3px rgba(0,0,0,.12); font-weight: 600; }
@@ -1294,6 +1326,9 @@ a.row:hover { text-decoration: none; background: var(--acc-soft); }
 .sh-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .srch-k.mat { color: var(--mat); } .srch-k.eko { color: var(--eko); }
 
+.sc-link { color: inherit; }
+.sc-link:hover { text-decoration: none; }
+
 </style>
 </head>
 <body>
@@ -1307,7 +1342,7 @@ a.row:hover { text-decoration: none; background: var(--acc-soft); }
 </div></header>
 <main id="view"></main>
 <div class="srch" id="srch" hidden role="dialog" aria-modal="true" aria-label="Hledat"><div class="srch-box">
-  <div class="srch-in"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg><input id="srchQ" type="search" placeholder="Hledej důkaz, pojem, přednášku…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+  <div class="srch-in"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg><input id="srchQ" type="search" aria-label="Hledat v obou předmětech" placeholder="Hledej důkaz, pojem, přednášku…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
   <div class="srch-res" id="srchRes"></div>
 </div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -1324,7 +1359,8 @@ const URLS = GH
   ? { mat: '/matematika-1/', eko: '/ekonomie-1/' }
   : { mat: 'https://claude.ai/artifact/GBUD1Pozz6yiuu1kuV3z4H', eko: 'https://claude.ai/artifact/Pxpy6GJsuRUEFgzC3kgg71' };
 const TGT = GH ? '' : ' target="_blank" rel="noopener"';
-const href = (s, route) => URLS[s] + (route && GH ? '#' + route : '');
+const ROUTE_OK = r => typeof r === 'string' && /^[a-z0-9-]{1,80}$/i.test(r);
+const href = (s, route) => URLS[s] + (route && GH && ROUTE_OK(route) ? '#' + route : '');
 
 /* ---------- úložiště ---------- */
 const LS = (() => { try { localStorage.setItem('ies:_t', '1'); localStorage.removeItem('ies:_t'); return localStorage; } catch { return null; } })();
@@ -1438,7 +1474,7 @@ function matProg() {
   const zapOn = nextZap && !M('wDone', false);
   if (zapOn) rows.unshift({ l: nextZap.what.replace('zápočtová písemka', 'zápočet') + ' · cvičné', a: p3.c + h3.c, b: T.p3.n + T.h3.n, go: 'pisemky-p3' });
   const total = rows.slice(zapOn ? 1 : 0).reduce((s, r) => s + r.a / r.b, 0) / 4;
-  const last = M('last', null), cont = last;
+  const last = M('last', null), cont = ROUTE_OK(last) ? last : null;
   return { rows, pct: Math.round(100 * total), cont, contL: MAT_LAST(cont), zk, p3, h3, kp, firstProof, kc, dc, firstKey, firstDef, nextZap: zapOn ? nextZap : null, any: !!(last || kp || kc || dc || zk.c || p3.c) };
 }
 function ekoProg() {
@@ -1457,7 +1493,7 @@ function ekoProg() {
   const total = rows.reduce((s, r) => s + r.a / r.b, 0) / rows.length;
   /* nejnižší přednáška, kde zbývají nezodpovězené otázky (z prostudovaných) */
   let quizL = null; for (const t of D.eko.theory) { if (!rdm[t.n] && quizL) break; if (D.eko.ql.some((l, i) => l === t.n && qs[i] == null)) { quizL = t.n; if (rdm[t.n]) break; } }
-  const last = E('last', null);
+  const last = ROUTE_OK(E('last', null)) ? E('last', null) : null;
   return { rows, pct: Math.round(100 * total), cont: last, contL: EKO_LAST(last), read, firstUnread, qOk, qWrong, tDone, firstTest, gKnown, quizL, any: !!(last || read || qOk || qWrong || tDone) };
 }
 
@@ -1533,7 +1569,7 @@ function subjCard(s, P) {
     ? [['pisemky', 'Písemky'], ['dukazy', 'Důkazy'], ['priklady', 'Příklady'], ['ustni', 'Ústní'], ['pisemky-tahak', 'Tahák']]
     : [['teorie', 'Teorie'], ['kviz', 'Kvíz'], ['testy', 'Testy'], ['karticky', 'Kartičky'], ['tahak', 'Tahák']];
   const desc = s === 'mat' ? `${MAT_PROOFS.length} důkazů · ${Object.values(D.mat.tests).reduce((a, t) => a + t.n, 0)} písemek · pojmy a definice` : `${D.eko.theory.length} přednášek · ${D.eko.ql.length} otázek · ${D.eko.nTests} testů`;
-  const top = `<div class="sc-top"><span class="sc-ic">${ICONS[s]}</span><div class="sc-tt"><h2 class="h2">${SUBJ[s]}</h2><span>${desc}</span></div>${GH ? `<div class="sc-pct">${P.pct} %<small>celkem</small></div>` : ''}</div>`;
+  const top = `<div class="sc-top"><span class="sc-ic">${ICONS[s]}</span><div class="sc-tt"><h2 class="h2"><a class="sc-link" href="${href(s, GH ? 'domu' : '')}"${TGT}>${SUBJ[s]}</a></h2><span>${desc}</span></div>${GH ? `<div class="sc-pct">${P.pct} %<small>celkem</small></div>` : ''}</div>`;
   const body = GH
     ? `<div class="meter" role="progressbar" aria-label="Celkový pokrok ${SUBJ[s]}" aria-valuenow="${P.pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${P.pct}%"></i></div>
        <div class="rows">${P.rows.map(r => `<a class="row" href="${href(s, r.go)}"><b>${esc(r.l)}</b><span class="n">${r.a}/${r.b}</span><span class="mini"><i style="width:${pct(r.a, r.b)}%"></i></span></a>`).join('')}</div>
@@ -1632,11 +1668,12 @@ function exportBackup() {
 }
 let pendingImport = null;
 function importBackup(file) {
+  if (file.size > 5e6 || !/\.json$/i.test(file.name)) { toast('Vyber soubor zálohy (.json, do 5 MB).', 'warn'); return; }
   const r = new FileReader();
   r.onload = () => {
     let j; try { j = JSON.parse(r.result); } catch { toast('Soubor není platná záloha.', 'warn'); return; }
     if (!j || j.app !== 'studium-ies' || typeof j.data !== 'object') { toast('Tohle není záloha z webu IES.', 'warn'); return; }
-    const ks = Object.keys(j.data).filter(k => /^(mat1|eko1|ies):/.test(k) && typeof j.data[k] === 'string');
+    const ks = Object.keys(j.data).filter(k => /^(mat1|eko1|ies):[\w-]{1,60}$/.test(k) && typeof j.data[k] === 'string' && j.data[k].length < 200000 && (() => { try { JSON.parse(j.data[k]); return true; } catch { return false; } })());
     pendingImport = ks.map(k => [k, j.data[k]]);
     toast(`Záloha z ${new Date(j.at).toLocaleDateString('cs-CZ')} má ${ks.length} položek. Klikni znovu na „Nahrát zálohu“ a potvrdíš přepsání.`, 'warn');
     twiceAt.imp = Date.now();
@@ -1691,6 +1728,10 @@ document.getElementById('themeBtn').addEventListener('click', () => { const t = 
 /* pokrok se mohl změnit v jiné kartě → překreslit při návratu */
 window.addEventListener('storage', e => { if (e.key && /^(mat1|eko1):/.test(e.key)) render(); });
 document.addEventListener('visibilitychange', () => { if (!document.hidden) render(); });
+/* „Přeskočit na obsah“ pro ovládání klávesnicí (první Tab na stránce) */
+(() => { const m = document.getElementById('view'); if (!m || document.querySelector('.skip')) return; m.setAttribute('tabindex', '-1');
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'skip'; b.textContent = 'Přeskočit na obsah';
+  b.addEventListener('click', () => { m.focus({ preventScroll: true }); m.scrollIntoView(); }); document.body.prepend(b); })();
 render();
 if (location.hash) { const el = document.getElementById(location.hash.slice(1)); if (el) el.scrollIntoView(); }
 
