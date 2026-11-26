@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>IES</title>
-<meta name="description" content="Rozcestník studijních webů IES FSV UK: Matematika I a Ekonomie I. Termíny, pokrok a plán učení."><meta name="theme-color" content="#1d1d1f"><meta property="og:type" content="website"><meta property="og:title" content="IES"><meta property="og:description" content="Rozcestník studijních webů IES FSV UK: Matematika I a Ekonomie I. Termíny, pokrok a plán učení."><meta property="og:url" content="https://huyhoang-vhh.github.io/"><meta property="og:locale" content="cs_CZ"><link rel="canonical" href="https://huyhoang-vhh.github.io/"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2715%27 fill=%27%231d1d1f%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27-apple-system,Helvetica,Arial%27 font-size=%2722%27 font-weight=%27700%27 fill=%27%23fff%27 text-anchor=%27middle%27%3EIES%3C/text%3E%3C/svg%3E">
+<meta name="description" content="Rozcestník studijních webů IES FSV UK: Matematika I a Ekonomie I. Termíny, pokrok a plán učení."><meta name="theme-color" content="#1d1d1f"><meta property="og:type" content="website"><meta property="og:title" content="IES"><meta property="og:description" content="Rozcestník studijních webů IES FSV UK: Matematika I a Ekonomie I. Termíny, pokrok a plán učení."><meta property="og:url" content="https://huyhoang-vhh.github.io/"><meta property="og:image" content="https://huyhoang-vhh.github.io/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta property="og:locale" content="cs_CZ"><link rel="canonical" href="https://huyhoang-vhh.github.io/"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2715%27 fill=%27%231d1d1f%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27-apple-system,Helvetica,Arial%27 font-size=%2722%27 font-weight=%27700%27 fill=%27%23fff%27 text-anchor=%27middle%27%3EIES%3C/text%3E%3C/svg%3E">
 <style>
 /* Layout: skleněná horní lišta, celoplošné pásy (bílý / šedý / černý) střídané jako na apple.com, obsah 980px, velké tituly, zaoblené dlaždice */
 :root {
@@ -1205,6 +1205,13 @@ html { accent-color: var(--blue); caret-color: var(--blue); scrollbar-color: col
 a { text-underline-offset: .18em; }
 .stat b, .hp-when, .hp-stat b, .meter + *, .badge, time, .tl-n, .cd, .num { font-variant-numeric: tabular-nums; }
 summary:not(.pf-open)::after { margin-left: .3em; }
+/* mobil: u písemky a důkazu drží nahoře jen jejich lišta, hlavička webu odjede (porota 2026-11-26) */
+@media (max-width: 734px) {
+  body:has(.testbar) .gnav, body:has(.pbar) .gnav { position: relative; }
+  body:has(.testbar) .testbar, body:has(.pbar) .pbar { top: env(safe-area-inset-top, 0px); }
+}
+/* úvod MAT: stejný centrovaný nadpis jako rozcestník a EKO (porota 2026-11-26) */
+.home-h { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; margin-bottom: 8px; }
 
 /* =================== rozcestník IES (navazuje na style.css z MAT I) =================== */
 :root { --mat: #0066cc; --eko: #ad4708; --mat-btn: #0071e3; --eko-btn: #ad4708; --mat-soft: color-mix(in srgb, var(--mat) 11%, transparent); --eko-soft: color-mix(in srgb, var(--eko) 12%, transparent); }
