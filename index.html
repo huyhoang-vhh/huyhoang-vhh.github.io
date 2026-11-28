@@ -1362,6 +1362,11 @@ a.row:hover { text-decoration: none; background: var(--acc-soft); }
 .seg button { color: var(--ink); min-height: 24px; box-sizing: border-box; }
 .linkbtn { display: inline-flex; align-items: center; min-height: 24px; }
 
+/* „Pokračuj: …“ se vždy vejde na jeden řádek, delší text skončí třemi tečkami (2026-11-28) */
+.sc-act { min-width: 0; max-width: 100%; }
+.sc-act .pill { max-width: 100%; min-width: 0; }
+.sc-act .pill-t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+
 </style>
 </head>
 <body>
@@ -1472,18 +1477,18 @@ const MAT_LAST = t => {
   if (!t || t === 'domu') return null;
   let m;
   if ((m = t.match(/^(p2|p3|zk|h2|h3)-(\d+)$/))) return `${D.mat.tests[m[1]].title}, č. ${+m[2]}`;
-  if ((m = t.match(/^dukaz-(.+)$/))) { const p = D.mat.proofs.find(x => x.id === m[1]); return p ? `${p.no}: ${p.name}` : 'Důkazy'; }
-  if ((m = t.match(/^ustni-(pojmy|definice)-(.+)$/))) { const L = m[1] === 'pojmy' ? D.mat.keys : D.mat.defs, it = L.find(x => x.id === m[2]); return it ? it.t : (m[1] === 'pojmy' ? 'Klíčové pojmy' : 'Definice'); }
-  if ((m = t.match(/^teorie-(.+)$/))) { const th = D.mat.theory.find(x => x.id === m[1]); return th ? 'Teorie · ' + th.title : 'Teorie'; }
+  if ((m = t.match(/^dukaz-(.+)$/))) { const p = D.mat.proofs.find(x => x.id === m[1]); return p ? (/\d/.test(p.no) ? p.no : p.name) : 'Důkazy'; }
+  if ((m = t.match(/^ustni-(pojmy|definice)-(.+)$/))) { const L = m[1] === 'pojmy' ? D.mat.keys : D.mat.defs, it = L.find(x => x.id === m[2]); return m[1] === 'pojmy' ? 'Klíčové pojmy' : 'Definice'; }
+  if ((m = t.match(/^teorie-(.+)$/))) { const th = D.mat.theory.find(x => x.id === m[1]); return 'Teorie'; }
   const map = { dukazy: 'Důkazy', ustni: 'Ústní zkouška', 'ustni-pojmy': 'Klíčové pojmy', 'ustni-definice': 'Definice', pisemky: 'Písemky', teorie: 'Teorie', terminy: 'Termíny', 'pisemky-tahak': 'Tahák', 'pisemky-zk': 'Písemná zkouška', 'pisemky-p3': '3. zápočtová písemka', 'pisemky-p2': '2. zápočtová písemka' };
   return map[t] || (t.startsWith('priklady') ? 'Příklady' : t.startsWith('karticky') ? 'Kartičky' : null);
 };
 const EKO_LAST = t => {
   if (!t || t === 'domu') return null;
   let m;
-  if ((m = t.match(/^teorie-l(\d+)$/))) { const th = D.eko.theory[+m[1] - 1]; return th ? `Přednáška ${th.n}: ${th.title}` : 'Teorie'; }
+  if ((m = t.match(/^teorie-l(\d+)$/))) { const th = D.eko.theory[+m[1] - 1]; return th ? `Přednáška ${th.n}` : 'Teorie'; }
   if ((m = t.match(/^test-(\d+)$/))) return `Test č. ${+m[1]}`;
-  if ((m = t.match(/^kviz-(\d+)$/))) return `Kvíz k přednášce ${+m[1]}`;
+  if ((m = t.match(/^kviz-(\d+)$/))) return `Kvíz · přednáška ${+m[1]}`;
   const map = { teorie: 'Teorie', tahak: 'Tahák vzorců', kviz: 'Kvíz', 'kviz-vse': 'Kvíz · vše', 'kviz-chyby': 'Kvíz · chyby', 'kviz-zk': 'Kvíz · úroveň zkoušky', testy: 'Testy', karticky: 'Kartičky', terminy: 'Termíny', priklady: 'Příklady', nahodny: 'Náhodný test' };
   return map[t] || (t.startsWith('priklady') ? 'Příklady' : null);
 };
@@ -1609,7 +1614,7 @@ function subjCard(s, P) {
        ${examBox(s)}`
     : `<p class="sc-note">${s === 'mat' ? 'Zápočtové a zkouškové písemky s řešením, důkazy krok za krokem, klíčové pojmy a definice k ústní.' : 'Teorie s interaktivními grafy, kvíz na úrovni zkoušky, testy nanečisto, kartičky a tahák vzorců.'}</p>`;
   const cont = GH && P.cont && P.contL
-    ? `<a class="pill" href="${href(s, P.cont)}">Pokračuj: ${esc(P.contL)}</a>`
+    ? `<a class="pill" href="${href(s, P.cont)}" title="Pokračuj: ${esc(P.contL)}"><span class="pill-t">Pokračuj: ${esc(P.contL)}</span></a>`
     : `<a class="pill" href="${href(s)}"${TGT}>${GH && !P.any ? 'Začít s ' + (s === 'mat' ? 'matematikou' : 'ekonomií') : 'Otevřít web'}</a>`;
   return `<article class="sc ${s}" data-open="${href(s, GH ? 'domu' : '')}" title="Otevřít ${SUBJ[s]}">${top}${body}<div class="sc-act">${cont}</div><div class="sc-quick">${quick.map(([r, l]) => `<a href="${href(s, r)}"${TGT}>${l}</a>`).join('')}</div></article>`;
 }
